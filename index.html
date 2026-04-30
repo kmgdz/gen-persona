@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // Suppress noisy wallet extension errors
+      const originalConsoleError = console.error;
+      console.error = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('isZerion')) {
+          return;
+        }
+        if (args[0] && args[0] instanceof Error && args[0].message.includes('isZerion')) {
+          return;
+        }
+        originalConsoleError.apply(console, args);
+      };
+
+      window.addEventListener('error', function(e) {
+        if (e.message && e.message.includes('isZerion')) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function(e) {
+        if (e.reason && e.reason.message && e.reason.message.includes('isZerion')) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
